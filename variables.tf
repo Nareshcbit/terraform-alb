@@ -1,3 +1,6 @@
+variable "vpc_id" {}
+variable "subnets" {}
+
 variable "create_lb" {
   default     = true
 }
@@ -15,7 +18,7 @@ variable "internal" {
   default     = false
 }
 
-variable "subnets" {}
+
 
 variable "security_group_ids" {
   default     = ""
@@ -52,4 +55,23 @@ variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
   default     = {}
+}
+
+variable "target_groups" {
+  description = "A list of maps containing key/value pairs that define the target groups to be created. Order of these maps is important and the index of these are to be referenced in listener definitions. Required key/values: name, backend_protocol, backend_port. Optional key/values are in the target_groups_defaults variable."
+  type        = any
+  default     = [
+    {
+      name_prefix      = "http"
+      backend_protocol = "HTTP"
+      backend_port     = 80
+      target_type      = "instance"
+    },
+    {
+      name_prefix      = "https"
+      backend_protocol = "HTTPS"
+      backend_port     = 443
+      target_type      = "instance"
+    }
+  ]
 }
